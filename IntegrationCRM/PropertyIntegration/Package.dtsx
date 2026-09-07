@@ -1,0 +1,1736 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="9/8/2026 12:38:22 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DESKTOP-UV8IFM4"
+  DTS:CreatorName="DESKTOP-UV8IFM4\dusan"
+  DTS:DTSID="{9A571DA3-8D05-4D1F-8A5F-A646875E3F8E}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="17.0.1016.0"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Package"
+  DTS:PackageType="5"
+  DTS:VersionBuild="6"
+  DTS:VersionGUID="{E5D5787A-D67D-4A1C-B96B-557149E95F80}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[DESKTOP-UV8IFM4.Testing]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{5FF38EED-53AE-4A50-80AB-756937F14E31}"
+      DTS:ObjectName="DESKTOP-UV8IFM4.Testing">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=DESKTOP-UV8IFM4;Initial Catalog=Testing;Provider=SQLNCLI11.1;Integrated Security=SSPI;Application Name=SSIS-Package-{5FF38EED-53AE-4A50-80AB-756937F14E31}DESKTOP-UV8IFM4.Testing;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[Dynamics CRM Connection Manager]"
+      DTS:CreationName="DynamicsCRM"
+      DTS:DTSID="{852F93B8-F92E-4723-9034-887CF95F4620}"
+      DTS:ObjectName="Dynamics CRM Connection Manager">
+      <DTS:ObjectData>
+        <CrmConnectionManager
+          ConnectionString="AuthenticationType=OAuth;ServiceEndpoint=WebAPI;UserName=;Domain=;ServerUrl=https://org4bb05794.crm17.dynamics.com;ProxyUsername=;ProxyMode=NoProxy;ProxyServer=;ProxyServerPort=0;BypassProxyOnLocal=False;HomeRealmUri=;ApiVersion=;OAuthType=ClientCredentials;ClientAppId=5d0c6195-403d-48a8-a981-beacd7a60580;TokenPath=;CertificateThumbprint=;IncludeCertificateChainInAssertion=False;AuthorizationServerUrl=;ServiceResource=;ServiceTimeout=120;RetryOnIntermittentErrors=True;IgnoreCertificateErrors=False;TimezoneConversionEngine=Auto;HttpCertificateThumbprint=;HttpCustomHeaders={}"
+          ConnectByProxy="False">
+          <ClientSecret
+            Sensitive="1" xmlns="www.microsoft.com/SqlServer/Dts"
+            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA01fW2t/QzkSCF/LXbTRzRgAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAAAugF3xleaqpM9U/uPlQXDOwNMTm9izYNm+CoG9+GQn2wAAAAAOgAAAAAIAACAAAAA/Qb2+qJIm7+IvJzajE73/Pd4SUXUJrc6rIjJaOTHUwWAAAADV4S8N7W9v/XBfUr+zRhS71GKiF1Wxh6fRk8bouKO8a5JUsea/8RvKajuxs+LPPLtDVwmYGCkmh8JPJFDtkLh7FNXR+C1PxxhVQe5Z9iWy+ikTZd/I4jDafzUz3xTE6chAAAAAGBCiHXkaVIJ50F80fLUI8VGg8v3A+ZHFtSRdzbSCJTA0DT3TkGgPBsgAlvSzgeFljKmZe1vWn4OPIfU23d3eKg</ClientSecret>
+        </CrmConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[Excel Connection Manager]"
+      DTS:CreationName="EXCEL"
+      DTS:DTSID="{70A5157E-76B3-40A6-8089-90B884D8A17F}"
+      DTS:ObjectName="Excel Connection Manager">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="0"
+          DTS:ConnectRetryInterval="0"
+          DTS:ConnectionString="Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\dusan\integration-task\assets\CRM_4 - Properties.xlsx;Extended Properties=&quot;Excel 12.0 XML;HDR=YES&quot;;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Clear staging table"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{85C584B2-BC6A-4DE0-BD6E-1D153E3CBCD7}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Clear staging table"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2025; © 2025 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{5FF38EED-53AE-4A50-80AB-756937F14E31}"
+          SQLTask:SqlStatementSource="DELETE FROM Properties" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\From Excel to db"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{8634F0C8-E172-4C37-B505-3499110F7D55}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="From Excel to db"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\From Excel to db\Data Conversion"
+              componentClassID="Microsoft.DataConvert"
+              contactInfo="Data Conversion;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Data Conversion"
+              name="Data Conversion"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\From Excel to db\Data Conversion.Inputs[Data Conversion Input]"
+                  name="Data Conversion Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\From Excel to db\Data Conversion.Inputs[Data Conversion Input].Columns[Rating (Stars)]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Rating (Stars)"
+                      lineageId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].Columns[Rating (Stars)]" />
+                    <inputColumn
+                      refId="Package\From Excel to db\Data Conversion.Inputs[Data Conversion Input].Columns[Number of Rooms]"
+                      cachedDataType="r8"
+                      cachedName="Number of Rooms"
+                      lineageId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].Columns[Number of Rooms]" />
+                    <inputColumn
+                      refId="Package\From Excel to db\Data Conversion.Inputs[Data Conversion Input].Columns[Average Daily Rate (USD)]"
+                      cachedDataType="r8"
+                      cachedName="Average Daily Rate (USD)"
+                      lineageId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].Columns[Average Daily Rate (USD)]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\From Excel to db\Data Conversion.Outputs[Data Conversion Output]"
+                  exclusionGroup="1"
+                  name="Data Conversion Output"
+                  synchronousInputId="Package\From Excel to db\Data Conversion.Inputs[Data Conversion Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\From Excel to db\Data Conversion.Outputs[Data Conversion Output].Columns[f_Rating (Stars)]"
+                      dataType="decimal"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\From Excel to db\Data Conversion.Outputs[Data Conversion Output].Columns[f_Rating (Stars)]"
+                      name="f_Rating (Stars)"
+                      scale="1"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\From Excel to db\Excel Source.Outputs[Excel Source Output].Columns[Rating (Stars)]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\From Excel to db\Data Conversion.Outputs[Data Conversion Output].Columns[f_Number of Rooms]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\From Excel to db\Data Conversion.Outputs[Data Conversion Output].Columns[f_Number of Rooms]"
+                      name="f_Number of Rooms"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\From Excel to db\Excel Source.Outputs[Excel Source Output].Columns[Number of Rooms]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\From Excel to db\Data Conversion.Outputs[Data Conversion Output].Columns[f_Average Daily Rate (USD)]"
+                      dataType="decimal"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\From Excel to db\Data Conversion.Outputs[Data Conversion Output].Columns[f_Average Daily Rate (USD)]"
+                      name="f_Average Daily Rate (USD)"
+                      scale="2"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\From Excel to db\Excel Source.Outputs[Excel Source Output].Columns[Average Daily Rate (USD)]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\From Excel to db\Data Conversion.Outputs[Data Conversion Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Data Conversion Error Output"
+                  synchronousInputId="Package\From Excel to db\Data Conversion.Inputs[Data Conversion Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\From Excel to db\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\From Excel to db\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\From Excel to db\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\From Excel to db\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\From Excel to db\Excel Source"
+              componentClassID="Microsoft.ExcelSource"
+              contactInfo="Excel Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+              description="Excel Source"
+              name="Excel Source"
+              usesDispositions="true"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">Properties$</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mapping from parameters in the SQL command to variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\From Excel to db\Excel Source.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[Excel Connection Manager]"
+                  connectionManagerRefId="Package.ConnectionManagers[Excel Connection Manager]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output]"
+                  name="Excel Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].Columns[Property ID]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].ExternalColumns[Property ID]"
+                      length="255"
+                      lineageId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].Columns[Property ID]"
+                      name="Property ID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].Columns[Property Name]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].ExternalColumns[Property Name]"
+                      length="255"
+                      lineageId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].Columns[Property Name]"
+                      name="Property Name"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].Columns[Property Type]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].ExternalColumns[Property Type]"
+                      length="255"
+                      lineageId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].Columns[Property Type]"
+                      name="Property Type"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].Columns[Number of Rooms]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].ExternalColumns[Number of Rooms]"
+                      lineageId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].Columns[Number of Rooms]"
+                      name="Number of Rooms"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].Columns[Location]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].ExternalColumns[Location]"
+                      length="255"
+                      lineageId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].Columns[Location]"
+                      name="Location"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].Columns[Average Daily Rate (USD)]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].ExternalColumns[Average Daily Rate (USD)]"
+                      lineageId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].Columns[Average Daily Rate (USD)]"
+                      name="Average Daily Rate (USD)"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].Columns[Rating (Stars)]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].ExternalColumns[Rating (Stars)]"
+                      length="255"
+                      lineageId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].Columns[Rating (Stars)]"
+                      name="Rating (Stars)"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].ExternalColumns[Property ID]"
+                      dataType="wstr"
+                      length="255"
+                      name="Property ID" />
+                    <externalMetadataColumn
+                      refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].ExternalColumns[Property Name]"
+                      dataType="wstr"
+                      length="255"
+                      name="Property Name" />
+                    <externalMetadataColumn
+                      refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].ExternalColumns[Property Type]"
+                      dataType="wstr"
+                      length="255"
+                      name="Property Type" />
+                    <externalMetadataColumn
+                      refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].ExternalColumns[Number of Rooms]"
+                      dataType="r8"
+                      name="Number of Rooms" />
+                    <externalMetadataColumn
+                      refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].ExternalColumns[Location]"
+                      dataType="wstr"
+                      length="255"
+                      name="Location" />
+                    <externalMetadataColumn
+                      refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].ExternalColumns[Average Daily Rate (USD)]"
+                      dataType="r8"
+                      name="Average Daily Rate (USD)" />
+                    <externalMetadataColumn
+                      refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].ExternalColumns[Rating (Stars)]"
+                      dataType="wstr"
+                      length="255"
+                      name="Rating (Stars)" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Error Output]"
+                  isErrorOut="true"
+                  name="Excel Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Error Output].Columns[Property ID]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\From Excel to db\Excel Source.Outputs[Excel Source Error Output].Columns[Property ID]"
+                      name="Property ID" />
+                    <outputColumn
+                      refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Error Output].Columns[Property Name]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\From Excel to db\Excel Source.Outputs[Excel Source Error Output].Columns[Property Name]"
+                      name="Property Name" />
+                    <outputColumn
+                      refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Error Output].Columns[Property Type]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\From Excel to db\Excel Source.Outputs[Excel Source Error Output].Columns[Property Type]"
+                      name="Property Type" />
+                    <outputColumn
+                      refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Error Output].Columns[Number of Rooms]"
+                      dataType="r8"
+                      lineageId="Package\From Excel to db\Excel Source.Outputs[Excel Source Error Output].Columns[Number of Rooms]"
+                      name="Number of Rooms" />
+                    <outputColumn
+                      refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Error Output].Columns[Location]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\From Excel to db\Excel Source.Outputs[Excel Source Error Output].Columns[Location]"
+                      name="Location" />
+                    <outputColumn
+                      refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Error Output].Columns[Average Daily Rate (USD)]"
+                      dataType="r8"
+                      lineageId="Package\From Excel to db\Excel Source.Outputs[Excel Source Error Output].Columns[Average Daily Rate (USD)]"
+                      name="Average Daily Rate (USD)" />
+                    <outputColumn
+                      refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Error Output].Columns[Rating (Stars)]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\From Excel to db\Excel Source.Outputs[Excel Source Error Output].Columns[Rating (Stars)]"
+                      name="Rating (Stars)" />
+                    <outputColumn
+                      refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\From Excel to db\Excel Source.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\From Excel to db\Excel Source.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\From Excel to db\Excel Source.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\From Excel to db\OLE DB Destination"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="OLE DB Destination"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[Properties]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\From Excel to db\OLE DB Destination.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[DESKTOP-UV8IFM4.Testing]"
+                  connectionManagerRefId="Package.ConnectionManagers[DESKTOP-UV8IFM4.Testing]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Location]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Location"
+                      externalMetadataColumnId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Location]"
+                      lineageId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].Columns[Location]" />
+                    <inputColumn
+                      refId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Property ID]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Property ID"
+                      externalMetadataColumnId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PropertyID]"
+                      lineageId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].Columns[Property ID]" />
+                    <inputColumn
+                      refId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Property Name]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Property Name"
+                      externalMetadataColumnId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PropertyName]"
+                      lineageId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].Columns[Property Name]" />
+                    <inputColumn
+                      refId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Property Type]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Property Type"
+                      externalMetadataColumnId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PropertyType]"
+                      lineageId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output].Columns[Property Type]" />
+                    <inputColumn
+                      refId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[f_Number of Rooms]"
+                      cachedDataType="i4"
+                      cachedName="f_Number of Rooms"
+                      externalMetadataColumnId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[NumberOfRooms]"
+                      lineageId="Package\From Excel to db\Data Conversion.Outputs[Data Conversion Output].Columns[f_Number of Rooms]" />
+                    <inputColumn
+                      refId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[f_Average Daily Rate (USD)]"
+                      cachedDataType="decimal"
+                      cachedName="f_Average Daily Rate (USD)"
+                      cachedScale="2"
+                      externalMetadataColumnId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[AverageDailyRateUSD]"
+                      lineageId="Package\From Excel to db\Data Conversion.Outputs[Data Conversion Output].Columns[f_Average Daily Rate (USD)]" />
+                    <inputColumn
+                      refId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[f_Rating (Stars)]"
+                      cachedDataType="decimal"
+                      cachedName="f_Rating (Stars)"
+                      cachedScale="1"
+                      externalMetadataColumnId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[RatingStars]"
+                      lineageId="Package\From Excel to db\Data Conversion.Outputs[Data Conversion Output].Columns[f_Rating (Stars)]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Id]"
+                      dataType="i4"
+                      name="Id" />
+                    <externalMetadataColumn
+                      refId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PropertyID]"
+                      dataType="wstr"
+                      length="500"
+                      name="PropertyID" />
+                    <externalMetadataColumn
+                      refId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PropertyName]"
+                      dataType="wstr"
+                      length="500"
+                      name="PropertyName" />
+                    <externalMetadataColumn
+                      refId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PropertyType]"
+                      dataType="wstr"
+                      length="500"
+                      name="PropertyType" />
+                    <externalMetadataColumn
+                      refId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[NumberOfRooms]"
+                      dataType="i4"
+                      name="NumberOfRooms" />
+                    <externalMetadataColumn
+                      refId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[Location]"
+                      dataType="wstr"
+                      length="500"
+                      name="Location" />
+                    <externalMetadataColumn
+                      refId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[AverageDailyRateUSD]"
+                      dataType="numeric"
+                      name="AverageDailyRateUSD"
+                      precision="10"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[RatingStars]"
+                      dataType="numeric"
+                      name="RatingStars"
+                      precision="3"
+                      scale="1" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\From Excel to db\OLE DB Destination.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\From Excel to db\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\From Excel to db\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\From Excel to db\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\From Excel to db\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\From Excel to db.Paths[Data Conversion Output]"
+              endId="Package\From Excel to db\OLE DB Destination.Inputs[OLE DB Destination Input]"
+              name="Data Conversion Output"
+              startId="Package\From Excel to db\Data Conversion.Outputs[Data Conversion Output]" />
+            <path
+              refId="Package\From Excel to db.Paths[Excel Source Output]"
+              endId="Package\From Excel to db\Data Conversion.Inputs[Data Conversion Input]"
+              name="Excel Source Output"
+              startId="Package\From Excel to db\Excel Source.Outputs[Excel Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Move data to CRM"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{214B8FC6-CB9B-4469-8757-3E7799A97451}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Move data to CRM"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Move data to CRM\Dynamics CRM Destination"
+              componentClassID="Microsoft.ManagedComponentHost"
+              contactInfo="KingswaySoft Inc.; http://www.kingswaysoft.com; support@kingswaysoft.com; Copyright (c) 2011-2026 KingswaySoft Inc."
+              description="Populate data into Microsoft Dynamics 365 CE/CRM."
+              name="Dynamics CRM Destination"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Destination entity to write data."
+                  expressionType="Notify"
+                  name="DestinationEntity">new_property</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies how data is written to CDS/Dynamics CRM server."
+                  name="ActionType"
+                  typeConverter="KingswaySoft.IntegrationToolkit.DynamicsCrm.DestinationActionType">5</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Specifies whether the values of CDS/CRM lookup fields should be removed if the reference records cannot be found. "
+                  expressionType="Notify"
+                  name="RemoveUnresolvableReferences">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Specifies whether duplicate detection should be enabled when creating or updating CDS/CRM records. Duplicate records are determined by the duplicate detection rules and settings defined in CDS or Microsoft Dynamics CRM server."
+                  expressionType="Notify"
+                  name="EnableSystemDuplicateDetection">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specify the matching criteria to be used when performing an update or upsert. "
+                  expressionType="Notify"
+                  name="RecordMatchingCriteria"
+                  typeConverter="KingswaySoft.IntegrationToolkit.Common.DescriptiveEnumTypeConverter`1[[KingswaySoft.IntegrationToolkit.DynamicsCrm.RecordMatchingCriteria">3</property>
+                <property
+                  dataType="System.String"
+                  description="Specify the key fields to be used to determine the matching records that exist in CDS/CRM for either Upsert/Update action or source duplicate optimization."
+                  expressionType="Notify"
+                  name="RecordMatchingKeyFields">new_propertyinhid</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Specifies whether to ignore those NULL-valued fields."
+                  expressionType="Notify"
+                  name="IgnoreNullValuedFields">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Specifies whether to ignore those fields that have no value changes in the target system. "
+                  expressionType="Notify"
+                  name="IgnoreUnchangedFields">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Specify whether to remove those invalid characters before writing to CDS/CRM."
+                  expressionType="Notify"
+                  name="RemoveInvalidCharacters">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specify the flag field(s) that are used to track the source of changes. The field(s) will not posted to CDS/CRM server unless there are changes to other fields if specified. &quot;Ignore Unchange Fields&quot; option is required in order for the specified flag field(s) to work. "
+                  expressionType="Notify"
+                  name="ChangeFlagFields"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies what action will be taken when multiple matches are found with Upsert action."
+                  expressionType="Notify"
+                  name="HandlingOfMultipleMatches"
+                  typeConverter="KingswaySoft.IntegrationToolkit.DynamicsCrm.HandlingOfMultipleMatches">1</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specify whether to use optimizations when there are duplicate records form the source system."
+                  expressionType="Notify"
+                  name="OptimizationOnSourceDuplicates"
+                  typeConverter="KingswaySoft.IntegrationToolkit.Common.DescriptiveEnumTypeConverter`1[[KingswaySoft.IntegrationToolkit.DynamicsCrm.OptimizationOnSourceDuplicates">0</property>
+                <property
+                  dataType="System.String"
+                  description="Workflow or action to be executed."
+                  expressionType="Notify"
+                  name="WorkflowAction"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the number of records to be sent to CDS/Dynamics CRM server in each service call."
+                  expressionType="Notify"
+                  name="BatchSize">100</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specify the total number or concurrent threads to write to CDS/CRM server simultaneously. "
+                  expressionType="Notify"
+                  name="ConcurrentWritingThreadsInTotal">20</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Specifies whether datetime values should be sent to CDS/CRM server in UTC format."
+                  expressionType="Notify"
+                  name="SendDateTimeInUtcFormat">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specify whether to bypass synchronous logic, asynchronous logic or, both during writing. "
+                  expressionType="Notify"
+                  name="BypassBusinessLogicExecution"></property>
+                <property
+                  dataType="System.String"
+                  description="Specify the registered plug-in steps that should be bypassed during runtime instead of all synchronous and asynchronous custom logic. "
+                  expressionType="Notify"
+                  name="BypassBusinessLogicExecutionStepIds"></property>
+                <property
+                  dataType="System.String"
+                  name="UserComponentTypeName">KingswaySoft.IntegrationToolkit.DynamicsCrm.CrmDestinationComponent</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Specify whether to use those homogeneous batch operation messages (such as CreateMultiple, UpdateMultiple, DeleteMultiple, etc.) for more efficient batch writing (if supported). "
+                  expressionType="Notify"
+                  name="UseHomogeneousBatchOperationMessages">true</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Move data to CRM\Dynamics CRM Destination.Connections[DynamicsCRM]"
+                  connectionManagerID="Package.ConnectionManagers[Dynamics CRM Connection Manager]"
+                  connectionManagerRefId="Package.ConnectionManagers[Dynamics CRM Connection Manager]"
+                  description="Dynamics CRM Connection Manager"
+                  name="DynamicsCRM" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].Columns[RatingStars]"
+                      cachedDataType="numeric"
+                      cachedName="RatingStars"
+                      cachedPrecision="3"
+                      cachedScale="1"
+                      externalMetadataColumnId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].ExternalColumns[new_rating]"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].Columns[RatingStars]" />
+                    <inputColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].Columns[PropertyType]"
+                      cachedDataType="wstr"
+                      cachedLength="500"
+                      cachedName="PropertyType"
+                      externalMetadataColumnId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].ExternalColumns[new_type]"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].Columns[PropertyType]" />
+                    <inputColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].Columns[AverageDailyRateUSD]"
+                      cachedDataType="numeric"
+                      cachedName="AverageDailyRateUSD"
+                      cachedPrecision="10"
+                      cachedScale="2"
+                      externalMetadataColumnId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].ExternalColumns[new_averagedailyrate]"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].Columns[AverageDailyRateUSD]" />
+                    <inputColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].Columns[Location]"
+                      cachedDataType="wstr"
+                      cachedLength="500"
+                      cachedName="Location"
+                      externalMetadataColumnId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].ExternalColumns[new_location]"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].Columns[Location]" />
+                    <inputColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].Columns[PropertyName]"
+                      cachedDataType="wstr"
+                      cachedLength="500"
+                      cachedName="PropertyName"
+                      externalMetadataColumnId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].ExternalColumns[new_name]"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].Columns[PropertyName]" />
+                    <inputColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].Columns[NumberOfRooms]"
+                      cachedDataType="i4"
+                      cachedName="NumberOfRooms"
+                      externalMetadataColumnId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].ExternalColumns[new_numberofrooms]"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].Columns[NumberOfRooms]" />
+                    <inputColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].Columns[PropertyID]"
+                      cachedDataType="wstr"
+                      cachedLength="500"
+                      cachedName="PropertyID"
+                      externalMetadataColumnId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].ExternalColumns[new_propertyinhid]"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].Columns[PropertyID]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].ExternalColumns[createdby]"
+                      dataType="guid"
+                      name="createdby">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          name="FieldType">Lookup</property>
+                        <property
+                          dataType="System.String"
+                          name="LookupTypes">systemuser</property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Createable">true</property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Updateable">false</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].ExternalColumns[importsequencenumber]"
+                      dataType="i4"
+                      name="importsequencenumber">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          name="FieldType">Integer</property>
+                        <property
+                          dataType="System.String"
+                          name="LookupTypes"></property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Createable">true</property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Updateable">false</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].ExternalColumns[new_averagedailyrate]"
+                      dataType="i4"
+                      name="new_averagedailyrate">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          name="FieldType">Integer</property>
+                        <property
+                          dataType="System.String"
+                          name="LookupTypes"></property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Createable">true</property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Updateable">true</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].ExternalColumns[new_location]"
+                      dataType="wstr"
+                      length="600"
+                      name="new_location">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          name="FieldType">String</property>
+                        <property
+                          dataType="System.String"
+                          name="LookupTypes"></property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Createable">true</property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Updateable">true</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].ExternalColumns[new_name]"
+                      dataType="wstr"
+                      length="850"
+                      name="new_name">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          name="FieldType">String</property>
+                        <property
+                          dataType="System.String"
+                          name="LookupTypes"></property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Createable">true</property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Updateable">true</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].ExternalColumns[new_numberofrooms]"
+                      dataType="i4"
+                      name="new_numberofrooms">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          name="FieldType">Integer</property>
+                        <property
+                          dataType="System.String"
+                          name="LookupTypes"></property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Createable">true</property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Updateable">true</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].ExternalColumns[new_propertyid]"
+                      dataType="guid"
+                      name="new_propertyid">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          name="FieldType">Uniqueidentifier</property>
+                        <property
+                          dataType="System.String"
+                          name="LookupTypes"></property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Createable">true</property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Updateable">true</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].ExternalColumns[new_propertyinhid]"
+                      dataType="wstr"
+                      length="100"
+                      name="new_propertyinhid">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          name="FieldType">String</property>
+                        <property
+                          dataType="System.String"
+                          name="LookupTypes"></property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Createable">true</property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Updateable">true</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].ExternalColumns[new_rating]"
+                      dataType="decimal"
+                      name="new_rating"
+                      scale="2">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          name="FieldType">Decimal</property>
+                        <property
+                          dataType="System.String"
+                          name="LookupTypes"></property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Createable">true</property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Updateable">true</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].ExternalColumns[new_type]"
+                      dataType="wstr"
+                      length="600"
+                      name="new_type">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          name="FieldType">String</property>
+                        <property
+                          dataType="System.String"
+                          name="LookupTypes"></property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Createable">true</property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Updateable">true</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].ExternalColumns[overriddencreatedon]"
+                      dataType="dbTimeStamp"
+                      name="overriddencreatedon">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          name="FieldType">DateTime</property>
+                        <property
+                          dataType="System.String"
+                          name="LookupTypes"></property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Createable">true</property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Updateable">false</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].ExternalColumns[ownerid]"
+                      dataType="guid"
+                      name="ownerid">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          name="FieldType">Owner</property>
+                        <property
+                          dataType="System.String"
+                          name="LookupTypes">systemuser;team</property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Createable">true</property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Updateable">true</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].ExternalColumns[owneridtype]"
+                      dataType="wstr"
+                      length="128"
+                      name="owneridtype">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          name="FieldType">EntityName</property>
+                        <property
+                          dataType="System.String"
+                          name="LookupTypes"></property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Createable">true</property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Updateable">true</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].ExternalColumns[statecode]"
+                      dataType="i4"
+                      name="statecode">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          name="FieldType">State</property>
+                        <property
+                          dataType="System.String"
+                          name="LookupTypes"></property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Createable">true</property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Updateable">true</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].ExternalColumns[statuscode]"
+                      dataType="i4"
+                      name="statuscode">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          name="FieldType">Status</property>
+                        <property
+                          dataType="System.String"
+                          name="LookupTypes"></property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Createable">true</property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Updateable">true</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].ExternalColumns[timezoneruleversionnumber]"
+                      dataType="i4"
+                      name="timezoneruleversionnumber">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          name="FieldType">Integer</property>
+                        <property
+                          dataType="System.String"
+                          name="LookupTypes"></property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Createable">true</property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Updateable">true</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input].ExternalColumns[utcconversiontimezonecode]"
+                      dataType="i4"
+                      name="utcconversiontimezonecode">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          name="FieldType">Integer</property>
+                        <property
+                          dataType="System.String"
+                          name="LookupTypes"></property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Createable">true</property>
+                        <property
+                          dataType="System.Boolean"
+                          name="Updateable">true</property>
+                      </properties>
+                    </externalMetadataColumn>
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Move data to CRM\Dynamics CRM Destination.Outputs[Default Output]"
+                  exclusionGroup="1"
+                  name="Default Output"
+                  synchronousInputId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Outputs[Default Output].Columns[SavedRecordId]"
+                      dataType="guid"
+                      lineageId="Package\Move data to CRM\Dynamics CRM Destination.Outputs[Default Output].Columns[SavedRecordId]"
+                      name="SavedRecordId" />
+                    <outputColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Outputs[Default Output].Columns[IsNew]"
+                      dataType="bool"
+                      lineageId="Package\Move data to CRM\Dynamics CRM Destination.Outputs[Default Output].Columns[IsNew]"
+                      name="IsNew" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True" />
+                </output>
+                <output
+                  refId="Package\Move data to CRM\Dynamics CRM Destination.Outputs[Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Error Output"
+                  synchronousInputId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Outputs[Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Move data to CRM\Dynamics CRM Destination.Outputs[Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Outputs[Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Move data to CRM\Dynamics CRM Destination.Outputs[Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                    <outputColumn
+                      refId="Package\Move data to CRM\Dynamics CRM Destination.Outputs[Error Output].Columns[ErrorMessage]"
+                      dataType="wstr"
+                      length="2048"
+                      lineageId="Package\Move data to CRM\Dynamics CRM Destination.Outputs[Error Output].Columns[ErrorMessage]"
+                      name="ErrorMessage" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Move data to CRM\OLE DB Source"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="OLE DB Source"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[dbo].[Properties]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Move data to CRM\OLE DB Source.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[DESKTOP-UV8IFM4.Testing]"
+                  connectionManagerRefId="Package.ConnectionManagers[DESKTOP-UV8IFM4.Testing]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].Columns[Id]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Id]"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].Columns[Id]"
+                      name="Id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].Columns[PropertyID]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PropertyID]"
+                      length="500"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].Columns[PropertyID]"
+                      name="PropertyID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].Columns[PropertyName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PropertyName]"
+                      length="500"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].Columns[PropertyName]"
+                      name="PropertyName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].Columns[PropertyType]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PropertyType]"
+                      length="500"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].Columns[PropertyType]"
+                      name="PropertyType"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].Columns[NumberOfRooms]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[NumberOfRooms]"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].Columns[NumberOfRooms]"
+                      name="NumberOfRooms"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].Columns[Location]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Location]"
+                      length="500"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].Columns[Location]"
+                      name="Location"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].Columns[AverageDailyRateUSD]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[AverageDailyRateUSD]"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].Columns[AverageDailyRateUSD]"
+                      name="AverageDailyRateUSD"
+                      precision="10"
+                      scale="2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].Columns[RatingStars]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[RatingStars]"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].Columns[RatingStars]"
+                      name="RatingStars"
+                      precision="3"
+                      scale="1"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Id]"
+                      dataType="i4"
+                      name="Id" />
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PropertyID]"
+                      dataType="wstr"
+                      length="500"
+                      name="PropertyID" />
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PropertyName]"
+                      dataType="wstr"
+                      length="500"
+                      name="PropertyName" />
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[PropertyType]"
+                      dataType="wstr"
+                      length="500"
+                      name="PropertyType" />
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[NumberOfRooms]"
+                      dataType="i4"
+                      name="NumberOfRooms" />
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Location]"
+                      dataType="wstr"
+                      length="500"
+                      name="Location" />
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[AverageDailyRateUSD]"
+                      dataType="numeric"
+                      name="AverageDailyRateUSD"
+                      precision="10"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[RatingStars]"
+                      dataType="numeric"
+                      name="RatingStars"
+                      precision="3"
+                      scale="1" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Id]"
+                      dataType="i4"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Id]"
+                      name="Id" />
+                    <outputColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PropertyID]"
+                      dataType="wstr"
+                      length="500"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PropertyID]"
+                      name="PropertyID" />
+                    <outputColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PropertyName]"
+                      dataType="wstr"
+                      length="500"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PropertyName]"
+                      name="PropertyName" />
+                    <outputColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PropertyType]"
+                      dataType="wstr"
+                      length="500"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[PropertyType]"
+                      name="PropertyType" />
+                    <outputColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[NumberOfRooms]"
+                      dataType="i4"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[NumberOfRooms]"
+                      name="NumberOfRooms" />
+                    <outputColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Location]"
+                      dataType="wstr"
+                      length="500"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Location]"
+                      name="Location" />
+                    <outputColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[AverageDailyRateUSD]"
+                      dataType="numeric"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[AverageDailyRateUSD]"
+                      name="AverageDailyRateUSD"
+                      precision="10"
+                      scale="2" />
+                    <outputColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[RatingStars]"
+                      dataType="numeric"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[RatingStars]"
+                      name="RatingStars"
+                      precision="3"
+                      scale="1" />
+                    <outputColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Move data to CRM.Paths[OLE DB Source Output]"
+              endId="Package\Move data to CRM\Dynamics CRM Destination.Inputs[Input]"
+              name="OLE DB Source Output"
+              startId="Package\Move data to CRM\OLE DB Source.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{7E84C75B-FEAC-4E95-B6D6-2F45EE3FFEDF}"
+      DTS:From="Package\From Excel to db"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Move data to CRM" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{E0164AC0-4950-46D9-B775-6BFF46278E26}"
+      DTS:From="Package\Clear staging table"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\From Excel to db" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="162,42"
+          Id="Package\From Excel to db"
+          TopLeft="132,242" />
+        <NodeLayout
+          Size="170,42"
+          Id="Package\Move data to CRM"
+          TopLeft="438,245" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="294,264.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="144,0"
+              Start="0,0"
+              End="136.5,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="136.5,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="171,42"
+          Id="Package\Clear staging table"
+          TopLeft="133.5,97.5" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="216,139.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,102.5"
+              Start="0,0"
+              End="0,95">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,95" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\From Excel to db">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="144,42"
+          Id="Package\From Excel to db\Excel Source"
+          TopLeft="210.5,52.5" />
+        <NodeLayout
+          Size="161,42"
+          Id="Package\From Excel to db\Data Conversion"
+          TopLeft="196.5,227.5" />
+        <EdgeLayout
+          Id="Package\From Excel to db.Paths[Excel Source Output]"
+          TopLeft="279.75,94.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,133"
+              Start="0,0"
+              End="0,125.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,125.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="177,42"
+          Id="Package\From Excel to db\OLE DB Destination"
+          TopLeft="192,402" />
+        <EdgeLayout
+          Id="Package\From Excel to db.Paths[Data Conversion Output]"
+          TopLeft="278.75,269.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,132.5"
+              Start="0,0"
+              End="0,125">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,125" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\From Excel to db\Excel Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\From Excel to db\OLE DB Destination">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\Move data to CRM">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="157,42"
+          Id="Package\Move data to CRM\OLE DB Source"
+          TopLeft="154,94" />
+        <NodeLayout
+          Size="213,42"
+          Id="Package\Move data to CRM\Dynamics CRM Destination"
+          TopLeft="335,360" />
+        <EdgeLayout
+          Id="Package\Move data to CRM.Paths[OLE DB Source Output]"
+          TopLeft="232.5,136">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="209,224"
+              Start="0,0"
+              End="209,216.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,108" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,108"
+                    Point2="0,112"
+                    Point3="4,112" />
+                  <mssgle:LineSegment
+                    End="205,112" />
+                  <mssgle:CubicBezierSegment
+                    Point1="205,112"
+                    Point2="209,112"
+                    Point3="209,116" />
+                  <mssgle:LineSegment
+                    End="209,216.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Move data to CRM\OLE DB Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
