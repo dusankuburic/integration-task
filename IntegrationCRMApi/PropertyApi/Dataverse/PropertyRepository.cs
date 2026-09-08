@@ -87,7 +87,7 @@ public class PropertyRepository : IPropertyRepository
             PropertyDv.EntityName,
             query.PageInfo.PageNumber);
 
-        return properties;
+        return properties.AsReadOnly();
     }
 
     private static Property Map(Entity entity) => new() {

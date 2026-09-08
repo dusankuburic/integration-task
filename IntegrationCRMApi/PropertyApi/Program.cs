@@ -1,6 +1,8 @@
 using Azure.Monitor.OpenTelemetry.Exporter;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Azure.Functions.Worker.OpenTelemetry;
+using Microsoft.Extensions.Caching.Hybrid;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -41,6 +43,23 @@ builder.Services.AddSingleton(provider => {
     return client;
 });
 
-builder.Services.AddScoped<IPropertyRepository, PropertyRepository>();
+var cacheMinutes = builder.Configuration.GetValue("CacheTTL", 5);
+var cacheLifetime = TimeSpan.FromMinutes(cacheMinutes);
+
+builder.Services.AddHybridCache(options => {
+    options.DefaultEntryOptions = new HybridCacheEntryOptions {
+        Expiration = cacheLifetime,
+        LocalCacheExpiration = cacheLifetime
+    };
+});
+
+const string dataverseRepositoryKey = "dataverse";
+
+builder.Services.AddKeyedScoped<IPropertyRepository, PropertyRepository>(dataverseRepositoryKey);
+
+builder.Services.AddScoped<IPropertyRepository>(provider =>
+    new CachedPropertyRepository(
+        provider.GetRequiredKeyedService<IPropertyRepository>(dataverseRepositoryKey),
+        provider.GetRequiredService<HybridCache>()));
 
 builder.Build().Run();

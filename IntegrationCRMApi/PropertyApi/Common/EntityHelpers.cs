@@ -4,7 +4,7 @@ namespace PropertyApi.Common;
 
 public static class EntityHelpers
 {
-    public static string? GetString(Entity entity, string attribute)
+    public static string GetString(Entity entity, string attribute)
     {
         if (!entity.Attributes.TryGetValue(attribute, out var value)) {
             return null;
@@ -36,7 +36,7 @@ public static class EntityHelpers
     }
 
 
-    public static string? GetFormattedValue(Entity entity, string attribute) =>
+    public static string GetFormattedValue(Entity entity, string attribute) =>
         entity.FormattedValues.TryGetValue(attribute, out var formatted) ? formatted : null;
 
     private static decimal Normalize(decimal value) => value / 1.000000000000000000000000000000000m;
