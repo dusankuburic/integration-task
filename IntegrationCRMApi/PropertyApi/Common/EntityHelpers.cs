@@ -1,6 +1,4 @@
-﻿using Microsoft.Xrm.Sdk;
-
-namespace PropertyApi.Common;
+﻿namespace PropertyApi.Common;
 
 public static class EntityHelpers
 {

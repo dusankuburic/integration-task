@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace PropertyApi.Common;
 
 public class DataverseOptions

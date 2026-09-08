@@ -1,10 +1,7 @@
-using Microsoft.Extensions.Logging;
-using Microsoft.PowerPlatform.Dataverse.Client;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Query;
 using PropertyApi.Common;
 using PropertyApi.Exceptions;
 using PropertyApi.Models;
+using QueryExpression = Microsoft.Xrm.Sdk.Query.QueryExpression;
 
 namespace PropertyApi.Dataverse;
 

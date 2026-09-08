@@ -1,15 +1,6 @@
-using Azure.Monitor.OpenTelemetry.Exporter;
-using Microsoft.Azure.Functions.Worker.Builder;
-using Microsoft.Azure.Functions.Worker.OpenTelemetry;
-using Microsoft.Extensions.Caching.Hybrid;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.PowerPlatform.Dataverse.Client;
 using PropertyApi.Common;
 using PropertyApi.Dataverse;
+using PropertyApi.Middlewares;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
@@ -25,6 +16,16 @@ builder.Services.AddOptions<DataverseOptions>()
     .Bind(builder.Configuration)
     .ValidateDataAnnotations()
     .ValidateOnStart();
+
+builder.Services.AddOptions<AuthOptions>()
+    .Bind(builder.Configuration)
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
+string[] publicFunctions = ["SwaggerJson", "SwaggerUi"];
+
+builder.UseWhen<AccessTokenMiddleware>(context =>
+    !publicFunctions.Contains(context.FunctionDefinition.Name));
 
 builder.Services.AddSingleton(provider => {
     var options = provider.GetRequiredService<IOptions<DataverseOptions>>().Value;
@@ -61,5 +62,29 @@ builder.Services.AddScoped<IPropertyRepository>(provider =>
     new CachedPropertyRepository(
         provider.GetRequiredKeyedService<IPropertyRepository>(dataverseRepositoryKey),
         provider.GetRequiredService<HybridCache>()));
+
+builder.Services.AddSwashBuckle(options => {
+    options.RoutePrefix = "api";
+    options.Title = "Property API";
+    options.Documents = [
+        new SwaggerDocument {
+            Name = "v1",
+            Title = "Property API",
+            Description = "Access to properties",
+            Version = "v1"
+        }
+    ];
+    options.ConfigureSwaggerGen = swagger => {
+        swagger.AddSecurityDefinition("bearer", new OpenApiSecurityScheme {
+            Type = SecuritySchemeType.Http,
+            Scheme = "bearer",
+            Description = "Configured access token sent as Bearer token"
+        });
+
+        swagger.AddSecurityRequirement(document => new OpenApiSecurityRequirement {
+            [new OpenApiSecuritySchemeReference("bearer", document)] = []
+        });
+    };
+});
 
 builder.Build().Run();

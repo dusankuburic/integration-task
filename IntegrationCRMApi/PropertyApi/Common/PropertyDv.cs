@@ -1,6 +1,5 @@
 ﻿namespace PropertyApi.Common;
 
-
 public static class PropertyDv
 {
     public static string EntityName = "new_property";
