@@ -58,10 +58,18 @@ const string dataverseRepositoryKey = "dataverse";
 
 builder.Services.AddKeyedScoped<IPropertyRepository, PropertyRepository>(dataverseRepositoryKey);
 
-builder.Services.AddScoped<IPropertyRepository>(provider =>
-    new CachedPropertyRepository(
-        provider.GetRequiredKeyedService<IPropertyRepository>(dataverseRepositoryKey),
-        provider.GetRequiredService<HybridCache>()));
+var cacheEnabled = builder.Configuration.GetValue("CacheEnabled", true);
+
+if (cacheEnabled) {
+    builder.Services.AddScoped<IPropertyRepository>(provider =>
+        new CachedPropertyRepository(
+            provider.GetRequiredKeyedService<IPropertyRepository>(dataverseRepositoryKey),
+            provider.GetRequiredService<HybridCache>()));
+}
+else {
+    builder.Services.AddScoped<IPropertyRepository>(provider =>
+        provider.GetRequiredKeyedService<IPropertyRepository>(dataverseRepositoryKey));
+}
 
 builder.Services.AddSwashBuckle(options => {
     options.RoutePrefix = "api";
