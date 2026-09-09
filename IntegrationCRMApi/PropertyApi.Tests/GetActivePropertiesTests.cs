@@ -12,7 +12,7 @@ namespace PropertyApi.Tests;
 public class GetActivePropertiesTests
 {
     [Fact]
-    public async Task Returns_200_with_a_count_matching_the_rows()
+    public async Task Returns_200_with_the_active_properties()
     {
         IReadOnlyList<Property> properties = [
             new Property { Name = "Villa 0" },
@@ -24,9 +24,9 @@ public class GetActivePropertiesTests
         var result = await function.Run(Request(), CancellationToken.None);
 
         var ok = Assert.IsType<OkObjectResult>(result);
-        var body = Assert.IsType<GetPropertiesResponse>(ok.Value);
+        var body = Assert.IsAssignableFrom<IReadOnlyList<Property>>(ok.Value);
 
-        Assert.Equal(2, body.Properties.Count);
+        Assert.Equal(new[] { "Villa 0", "Villa 1" }, body.Select(p => p.Name));
     }
 
     [Fact]
