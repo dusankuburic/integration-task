@@ -12,7 +12,6 @@ public static class EntityHelpers
             null => null,
             string text => text,
             OptionSetValue => GetFormattedValue(entity, attribute),
-            EntityReference reference => reference.Name,
             _ => value.ToString()
         };
     }
