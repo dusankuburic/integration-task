@@ -1,3 +1,7 @@
+### Swagger UI
+
+https://integrationtaskhotels-ahgzhthjayhpezaf.polandcentral-01.azurewebsites.net/api/swagger/ui
+
 ### Bearer AccessToken `leeBHB+PURPYQ4mFc6pl8bKlYbAt+OK5otWZbDEeAuQ=`
 
 ## Test machine

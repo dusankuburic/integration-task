@@ -26,7 +26,6 @@ public class GetActivePropertiesTests
         var ok = Assert.IsType<OkObjectResult>(result);
         var body = Assert.IsType<GetPropertiesResponse>(ok.Value);
 
-        Assert.Equal(2, body.Count);
         Assert.Equal(2, body.Properties.Count);
     }
 

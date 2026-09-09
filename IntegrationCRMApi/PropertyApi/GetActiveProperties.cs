@@ -16,7 +16,7 @@ public class GetActiveProperties
     }
 
     [Function("GetActiveProperties")]
-    [ProducesResponseType(typeof(GetPropertiesResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IReadOnlyList<Property>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
@@ -30,10 +30,7 @@ public class GetActiveProperties
         try {
             var properties = await _properties.GetActiveAsync(cancellationToken);
 
-            return new OkObjectResult(new GetPropertiesResponse {
-                Count = properties.Count,
-                Properties = properties
-            });
+            return new OkObjectResult(properties);
         }
         catch (DataverseUnavailableException ex) {
             _logger.LogError(ex, "Dataverse is unavailable.");
