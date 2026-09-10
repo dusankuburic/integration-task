@@ -1,34 +1,36 @@
+using PropertyApi.Common;
 using PropertyApi.Models;
-
 
 namespace PropertyApi.Dataverse;
 
-[ImmutableObject(true)]
-public sealed record ActiveProperties(IReadOnlyList<Property> Items);
-
-
 public class CachedPropertyRepository : IPropertyRepository
 {
-    private const string _key = "active_prop_key";
-
     private readonly IPropertyRepository _inner;
     private readonly HybridCache _cache;
+    private readonly HybridCacheEntryOptions _countOptions;
 
-    public CachedPropertyRepository(IPropertyRepository inner, HybridCache cache)
+    public CachedPropertyRepository(IPropertyRepository inner, HybridCache cache, TimeSpan countLifetime)
     {
         _inner = inner;
         _cache = cache;
+
+        _countOptions = new HybridCacheEntryOptions {
+            Expiration = countLifetime,
+            LocalCacheExpiration = countLifetime
+        };
     }
 
-    public async Task<IReadOnlyList<Property>> GetActiveAsync(CancellationToken cancellationToken)
+    public ValueTask<PropertyPage> GetActiveAsync(PageRequest page, CancellationToken cancellationToken)
     {
-        var cached = await _cache.GetOrCreateAsync(_key, LoadAsync, cancellationToken: cancellationToken);
-        return cached.Items;
+        return _inner.GetActiveAsync(page, cancellationToken);
     }
 
-    private async ValueTask<ActiveProperties> LoadAsync(CancellationToken cancellationToken)
+    public ValueTask<int> CountActiveAsync(CancellationToken cancellationToken)
     {
-        var properties = await _inner.GetActiveAsync(cancellationToken);
-        return new ActiveProperties(properties);
+        return _cache.GetOrCreateAsync(
+            "active_prop_count",
+            _inner.CountActiveAsync,
+            _countOptions,
+            cancellationToken: cancellationToken);
     }
 }

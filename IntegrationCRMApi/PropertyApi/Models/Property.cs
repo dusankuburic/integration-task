@@ -10,7 +10,5 @@ public class Property
     public string Location { get; init; }
     public decimal? AverageDailyRate { get; init; }
     public decimal? RatingStars { get; init; }
-    public int? StateCode { get; init; }
-    public string State { get; init; }
     public DateTime? CreatedOn { get; init; }
 }

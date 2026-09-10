@@ -44,8 +44,24 @@ builder.Services.AddSingleton(provider => {
     return client;
 });
 
-var cacheMinutes = builder.Configuration.GetValue("CacheTTL", 5);
-var cacheLifetime = TimeSpan.FromMinutes(cacheMinutes);
+
+builder.Services.AddResponseCompression(options => {
+    options.EnableForHttps = true;
+    options.MimeTypes = ["application/json"];
+});
+
+builder.Services.Configure<GzipCompressionProviderOptions>(options =>
+    options.Level = CompressionLevel.Fastest);
+builder.Services.Configure<BrotliCompressionProviderOptions>(options =>
+    options.Level = CompressionLevel.Fastest);
+
+builder.Services.AddSingleton<IStartupFilter, ResponseCompressionStartupFilter>();
+
+var cacheSeconds = builder.Configuration.GetValue("CacheTTLSeconds", 60);
+var cacheLifetime = TimeSpan.FromSeconds(cacheSeconds);
+
+var countCacheSeconds = builder.Configuration.GetValue("CountCacheTTLSeconds", 300);
+var countCacheLifetime = TimeSpan.FromSeconds(countCacheSeconds);
 
 builder.Services.AddHybridCache(options => {
     options.DefaultEntryOptions = new HybridCacheEntryOptions {
@@ -64,11 +80,27 @@ if (cacheEnabled) {
     builder.Services.AddScoped<IPropertyRepository>(provider =>
         new CachedPropertyRepository(
             provider.GetRequiredKeyedService<IPropertyRepository>(dataverseRepositoryKey),
-            provider.GetRequiredService<HybridCache>()));
+            provider.GetRequiredService<HybridCache>(),
+            countCacheLifetime));
 }
 else {
     builder.Services.AddScoped<IPropertyRepository>(provider =>
         provider.GetRequiredKeyedService<IPropertyRepository>(dataverseRepositoryKey));
+}
+
+const string builderResponseKey = "builder";
+
+builder.Services.AddKeyedScoped<IPropertyResponse, PropertyResponse>(builderResponseKey);
+
+if (cacheEnabled) {
+    builder.Services.AddScoped<IPropertyResponse>(provider =>
+        new CachedPropertyResponse(
+            provider.GetRequiredKeyedService<IPropertyResponse>(builderResponseKey),
+            provider.GetRequiredService<HybridCache>()));
+}
+else {
+    builder.Services.AddScoped<IPropertyResponse>(provider =>
+        provider.GetRequiredKeyedService<IPropertyResponse>(builderResponseKey));
 }
 
 builder.Services.AddSwashBuckle(options => {

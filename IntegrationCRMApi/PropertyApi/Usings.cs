@@ -2,8 +2,11 @@
 global using AzureFunctions.Extensions.Swashbuckle;
 global using AzureFunctions.Extensions.Swashbuckle.Attribute;
 global using AzureFunctions.Extensions.Swashbuckle.Settings;
+global using Microsoft.AspNetCore.Builder;
+global using Microsoft.AspNetCore.Hosting;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.ResponseCompression;
 global using Microsoft.Azure.Functions.Worker;
 global using Microsoft.Azure.Functions.Worker.Builder;
 global using Microsoft.Azure.Functions.Worker.Middleware;
@@ -20,3 +23,4 @@ global using Microsoft.Xrm.Sdk;
 global using Microsoft.Xrm.Sdk.Query;
 global using System.ComponentModel;
 global using System.ComponentModel.DataAnnotations;
+global using System.IO.Compression;

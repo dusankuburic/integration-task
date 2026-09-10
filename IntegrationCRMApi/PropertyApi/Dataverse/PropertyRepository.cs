@@ -7,13 +7,15 @@ namespace PropertyApi.Dataverse;
 
 public interface IPropertyRepository
 {
-    Task<IReadOnlyList<Property>> GetActiveAsync(CancellationToken cancellationToken);
+    ValueTask<PropertyPage> GetActiveAsync(PageRequest page, CancellationToken cancellationToken);
+
+    ValueTask<int> CountActiveAsync(CancellationToken cancellationToken);
 }
 
 public class PropertyRepository : IPropertyRepository
 {
     private const int ActiveStateCode = 0;
-    private const int PageSize = 5000;
+    private const int CountPageSize = 5000;
 
     private readonly ServiceClient _client;
     private readonly ILogger<PropertyRepository> _logger;
@@ -24,7 +26,7 @@ public class PropertyRepository : IPropertyRepository
         _logger = logger;
     }
 
-    public async Task<IReadOnlyList<Property>> GetActiveAsync(CancellationToken cancellationToken)
+    public async ValueTask<PropertyPage> GetActiveAsync(PageRequest page, CancellationToken cancellationToken)
     {
         if (!_client.IsReady) {
             throw new DataverseUnavailableException(
@@ -32,11 +34,9 @@ public class PropertyRepository : IPropertyRepository
         }
 
         var query = new QueryExpression(PropertyDv.EntityName);
-        query.Distinct = true;
         query.NoLock = false;
 
         query.ColumnSet = new ColumnSet(
-            PropertyDv.StateCode,
             PropertyDv.EntityId,
             PropertyDv.Name,
             PropertyDv.CreatedOn,
@@ -54,37 +54,75 @@ public class PropertyRepository : IPropertyRepository
         );
 
         query.Orders.Add(new OrderExpression(PropertyDv.Name, OrderType.Ascending));
+        query.Orders.Add(new OrderExpression(PropertyDv.CreatedOn, OrderType.Ascending));
+
         query.Orders.Add(new OrderExpression(PropertyDv.EntityId, OrderType.Ascending));
 
         query.PageInfo = new PagingInfo {
-            Count = PageSize,
+            Count = page.Size,
+            PageNumber = page.Page
+        };
+
+        var result = await _client.RetrieveMultipleAsync(query, cancellationToken);
+
+        _logger.LogInformation(
+            "Retrieved {Count} active {EntityName} rows for page {Page} of size {Size}.",
+            result.Entities.Count,
+            PropertyDv.EntityName,
+            page.Page,
+            page.Size);
+
+        return new PropertyPage {
+            Items = result.Entities.Select(Map).ToList(),
+            HasMore = result.MoreRecords
+        };
+    }
+
+    public async ValueTask<int> CountActiveAsync(CancellationToken cancellationToken)
+    {
+        if (!_client.IsReady) {
+            throw new DataverseUnavailableException(
+                $"The Dataverse connection is not ready. {_client.LastError}".Trim());
+        }
+
+        var query = new QueryExpression(PropertyDv.EntityName);
+        query.NoLock = false;
+        query.ColumnSet = new ColumnSet(false);
+
+        query.Criteria = new FilterExpression(LogicalOperator.And);
+
+        query.Criteria.Conditions.Add(
+            new ConditionExpression(PropertyDv.StateCode, ConditionOperator.Equal, ActiveStateCode)
+        );
+
+        query.Orders.Add(new OrderExpression(PropertyDv.EntityId, OrderType.Ascending));
+
+        query.PageInfo = new PagingInfo {
+            Count = CountPageSize,
             PageNumber = 1
         };
 
-        var properties = new List<Property>();
+        var total = 0;
 
         while (true) {
-            var page = await _client.RetrieveMultipleAsync(query, cancellationToken);
+            var result = await _client.RetrieveMultipleAsync(query, cancellationToken);
+            total += result.Entities.Count;
 
-            var mappeProperties = page.Entities.Select(Map);
-
-            properties.AddRange(mappeProperties);
-
-            if (!page.MoreRecords) {
+            if (!result.MoreRecords) {
                 break;
             }
 
             query.PageInfo.PageNumber++;
-            query.PageInfo.PagingCookie = page.PagingCookie;
+            query.PageInfo.PagingCookie = result.PagingCookie;
         }
 
         _logger.LogInformation(
-            "Retrieved {Count} active {EntityName} rows across {Pages} page(s).",
-            properties.Count,
+            "Counted {Total} active {EntityName} rows over {Pages} pages.",
+            total,
             PropertyDv.EntityName,
             query.PageInfo.PageNumber);
 
-        return properties.AsReadOnly();
+        return total;
     }
 
     private static Property Map(Entity entity) => new() {
@@ -96,8 +134,6 @@ public class PropertyRepository : IPropertyRepository
         NumberOfRooms = entity.GetAttributeValue<int?>(PropertyDv.NumberOfRooms),
         AverageDailyRate = EntityHelpers.GetDecimal(entity, PropertyDv.AverageDailyRate),
         RatingStars = EntityHelpers.GetDecimal(entity, PropertyDv.RatingStars),
-        StateCode = entity.GetAttributeValue<OptionSetValue>(PropertyDv.StateCode)?.Value,
-        State = EntityHelpers.GetFormattedValue(entity, PropertyDv.StateCode),
         CreatedOn = entity.GetAttributeValue<DateTime?>(PropertyDv.CreatedOn)
     };
 }

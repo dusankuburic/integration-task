@@ -26,7 +26,7 @@
           <SSIS:Property SSIS:Name="CreatorComputerName">DESKTOP-UV8IFM4</SSIS:Property>
           <SSIS:Property SSIS:Name="Description">
           </SSIS:Property>
-          <SSIS:Property SSIS:Name="PasswordVerifier" SSIS:Sensitive="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA01fW2t/QzkSCF/LXbTRzRgAAAAACAAAAAAAQZgAAAAEAACAAAADHeGYfBCrfEgDIFj+MWDK1pCPXjnl4n+PcCJuTvC2y2AAAAAAOgAAAAAIAACAAAAB6d9/+gvltRQqPFBmkcZtFhWrwYBXuRtZMAmhGySfWjpAAAACUk5ui1HbN+d4DZDLvhNR7N1FKtLWOdVM++SMQY0+rzoGimEElGk1zc5SKZURV755XluQOxmPsWpFGXM1reqrN7JCAOG7OGF1tLXOPeMskQZAa2sLGSaNt8OBUl8/gs3SYZOhChvZTrJJJrTvdl2ldFgAvMlPC5EqweI0oTqKV1adaebKrJCSwIX01p6pOm7RAAAAAp27aLsYYrf6izmu2jtxtCzTd8OqqlaKJO6PvBrTaefheCXeGQEQZIYrJ8FgLFCASuJtWyeBxyYbCI8iz2mUsRA==</SSIS:Property>
+          <SSIS:Property SSIS:Name="PasswordVerifier" SSIS:Sensitive="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA01fW2t/QzkSCF/LXbTRzRgAAAAACAAAAAAAQZgAAAAEAACAAAADZBvtDhkK8L4pNZ3j3TVsIj+HvRuPlpZ6dA+eGktPW1AAAAAAOgAAAAAIAACAAAAD0obKx/gdCZxF7Wa4EzUML9FHu+Kv1ox0YVfUKYHYEjJAAAABbAdNR8+NV4nxQeQtAjWAAYXlKWI3ocp83SHiUW/EafKrs0B/yyZEluaTdwX7IU6LO8T8ZonUE7amgTl4nWhX8Ijfv7DHiqIk1vYLO9OjqjBA30Hvjxg9Nh3CQItQAPaH9ydBdc+2E7PuUsHFgR2eZchY/WnWhOML8EbDdyyEV+ttF17RxFm4BQoxDCbpZrutAAAAAyK8udNtkOgnzju7ZQD3bwp7PDDPWIg/Mf2sRYmIGacGh3ylbibJf4EnQqax+NyxcR8HW7kozmTF02I4mH+fX7w==</SSIS:Property>
           <SSIS:Property SSIS:Name="FormatVersion">1</SSIS:Property>
         </SSIS:Properties>
         <SSIS:Packages>
@@ -42,10 +42,10 @@
                 <SSIS:Property SSIS:Name="Name">Package</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMajor">1</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionMinor">0</SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionBuild">6</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionBuild">9</SSIS:Property>
                 <SSIS:Property SSIS:Name="VersionComments">
                 </SSIS:Property>
-                <SSIS:Property SSIS:Name="VersionGUID">{E5D5787A-D67D-4A1C-B96B-557149E95F80}</SSIS:Property>
+                <SSIS:Property SSIS:Name="VersionGUID">{6C7EC46F-4679-4B1B-BDD1-F16FC3B97E49}</SSIS:Property>
                 <SSIS:Property SSIS:Name="PackageFormatVersion">8</SSIS:Property>
                 <SSIS:Property SSIS:Name="Description">
                 </SSIS:Property>
@@ -349,7 +349,7 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">AuthenticationType=OAuth;ServiceEndpoint=WebAPI;UserName=;Domain=;ServerUrl=https://org4bb05794.crm17.dynamics.com;ProxyUsername=;ProxyMode=NoProxy;ProxyServer=;ProxyServerPort=0;BypassProxyOnLocal=False;HomeRealmUri=;ApiVersion=;OAuthType=ClientCredentials;ClientAppId=5d0c6195-403d-48a8-a981-beacd7a60580;TokenPath=;CertificateThumbprint=;IncludeCertificateChainInAssertion=False;AuthorizationServerUrl=;ServiceResource=;ServiceTimeout=120;RetryOnIntermittentErrors=True;IgnoreCertificateErrors=False;TimezoneConversionEngine=Auto;HttpCertificateThumbprint=;HttpCustomHeaders={}</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">AuthenticationType=OAuth;ServiceEndpoint=WebAPI;UserName=;Domain=;ServerUrl=https://org4bb05794.crm17.dynamics.com;ProxyUsername=;ProxyMode=NoProxy;ProxyServer=;ProxyServerPort=0;BypassProxyOnLocal=False;HomeRealmUri=;ApiVersion=;OAuthType=ClientCredentials;ClientAppId=5d0c6195-403d-48a8-a981-beacd7a60580;TokenPath=;CertificateThumbprint=;IncludeCertificateChainInAssertion=False;Tenant=;AuthorizationServerUrl=;ServiceResource=;ServiceTimeout=120;RetryOnIntermittentErrors=True;IgnoreCertificateErrors=False;TimezoneConversionEngine=Auto;HttpCertificateThumbprint=;HttpCustomHeaders={}</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -653,6 +653,8 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">
+                    </SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -743,7 +745,7 @@
                     <SSIS:Property SSIS:Name="IncludeInDebugDump">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Required">0</SSIS:Property>
                     <SSIS:Property SSIS:Name="Sensitive">0</SSIS:Property>
-                    <SSIS:Property SSIS:Name="Value">Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\dusan\integration-task\assets\CRM_4 - Properties.xlsx;Extended Properties="Excel 12.0 XML;HDR=YES";</SSIS:Property>
+                    <SSIS:Property SSIS:Name="Value">Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\dusan\integration-task\assets\CRM_4 - Properties.xlsx;Extended Properties="EXCEL 12.0 XML;HDR=YES";</SSIS:Property>
                     <SSIS:Property SSIS:Name="DataType">18</SSIS:Property>
                   </SSIS:Properties>
                 </SSIS:Parameter>
@@ -874,7 +876,13 @@
         <LinkedAzureSSISIR />
         <LinkedAzureStorage />
         <RemoteExecutionFolder />
-        <ParameterConfigurationValues />
+        <ParameterConfigurationValues>
+          <ConfigurationSetting>
+            <Id>LastModifiedTime</Id>
+            <Name>LastModifiedTime</Name>
+            <Value xsi:type="xsd:dateTime">2026-09-09T19:36:12.6085712Z</Value>
+          </ConfigurationSetting>
+        </ParameterConfigurationValues>
       </Options>
     </Configuration>
   </Configurations>

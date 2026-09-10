@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using PropertyApi.Common;
 using PropertyApi.Dataverse;
 using PropertyApi.Models;
 using Xunit;
@@ -10,15 +11,21 @@ namespace PropertyApi.Tests;
 public class CachedPropertyRepositoryTests
 {
     [Fact]
-    public async Task Second_read_does_not_reach_the_inner_repository()
+    public async Task The_count_is_read_once_and_shared_by_every_page()
     {
         var inner = InnerRepository();
-        var repository = new CachedPropertyRepository(inner.Object, NewCache());
+        var repository = new CachedPropertyRepository(inner.Object, NewCache(), CountLifetime);
 
-        await repository.GetActiveAsync(CancellationToken.None);
-        await repository.GetActiveAsync(CancellationToken.None);
+        await repository.GetActiveAsync(Page(1), CancellationToken.None);
+        var first = await repository.CountActiveAsync(CancellationToken.None);
 
-        inner.Verify(r => r.GetActiveAsync(It.IsAny<CancellationToken>()), Times.Once);
+        await repository.GetActiveAsync(Page(2), CancellationToken.None);
+        var second = await repository.CountActiveAsync(CancellationToken.None);
+
+        Assert.Equal(80115, first);
+        Assert.Equal(80115, second);
+
+        inner.Verify(r => r.CountActiveAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -27,42 +34,44 @@ public class CachedPropertyRepositoryTests
         var inner = InnerRepository();
         var cache = NewCache();
 
-        await new CachedPropertyRepository(inner.Object, cache).GetActiveAsync(CancellationToken.None);
-        await new CachedPropertyRepository(inner.Object, cache).GetActiveAsync(CancellationToken.None);
+        await new CachedPropertyRepository(inner.Object, cache, CountLifetime).CountActiveAsync(CancellationToken.None);
+        await new CachedPropertyRepository(inner.Object, cache, CountLifetime).CountActiveAsync(CancellationToken.None);
 
-        inner.Verify(r => r.GetActiveAsync(It.IsAny<CancellationToken>()), Times.Once);
+        inner.Verify(r => r.CountActiveAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
-    public async Task Returns_what_the_inner_repository_returned()
+    public async Task Pages_are_not_cached_here()
     {
-        var repository = new CachedPropertyRepository(InnerRepository().Object, NewCache());
+        var inner = InnerRepository();
+        var repository = new CachedPropertyRepository(inner.Object, NewCache(), CountLifetime);
 
-        var first = await repository.GetActiveAsync(CancellationToken.None);
-        var second = await repository.GetActiveAsync(CancellationToken.None);
+        await repository.GetActiveAsync(Page(1), CancellationToken.None);
+        await repository.GetActiveAsync(Page(1), CancellationToken.None);
 
-        Assert.Equal(2, first.Count);
-        Assert.Equal("Villa 0", first[0].Name);
-        Assert.Equal("Villa 1", first[1].Name);
-
-        Assert.Equal(2, second.Count);
-        Assert.Equal("Villa 0", second[0].Name);
-        Assert.Equal("Villa 1", second[1].Name);
+        inner.Verify(
+            r => r.GetActiveAsync(It.IsAny<PageRequest>(), It.IsAny<CancellationToken>()),
+            Times.Exactly(2));
     }
 
+    private static readonly TimeSpan CountLifetime = TimeSpan.FromMinutes(5);
+
+    private static PageRequest Page(int number) => new(number, 10);
 
     private static Mock<IPropertyRepository> InnerRepository()
     {
-        IReadOnlyList<Property> properties = [
-            new Property { Name = "Villa 0" },
-            new Property { Name = "Villa 1" }
-        ];
-
         var repository = new Mock<IPropertyRepository>();
 
         repository
-            .Setup(r => r.GetActiveAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(properties);
+            .Setup(r => r.GetActiveAsync(It.IsAny<PageRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((PageRequest page, CancellationToken _) => new PropertyPage {
+                Items = [new Property { Name = $"Villa on page {page.Page}" }],
+                HasMore = true
+            });
+
+        repository
+            .Setup(r => r.CountActiveAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(80115);
 
         return repository;
     }

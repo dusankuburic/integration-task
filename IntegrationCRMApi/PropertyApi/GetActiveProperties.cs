@@ -1,4 +1,4 @@
-using PropertyApi.Dataverse;
+using PropertyApi.Common;
 using PropertyApi.Exceptions;
 using PropertyApi.Models;
 
@@ -6,17 +6,20 @@ namespace PropertyApi;
 
 public class GetActiveProperties
 {
-    private readonly IPropertyRepository _properties;
+    private readonly IPropertyResponse _properties;
     private readonly ILogger<GetActiveProperties> _logger;
 
-    public GetActiveProperties(IPropertyRepository properties, ILogger<GetActiveProperties> logger)
+    public GetActiveProperties(IPropertyResponse properties, ILogger<GetActiveProperties> logger)
     {
         _properties = properties;
         _logger = logger;
     }
 
     [Function("GetActiveProperties")]
-    [ProducesResponseType(typeof(IReadOnlyList<Property>), StatusCodes.Status200OK)]
+    [QueryStringParameter("page", "1-based page number", DataType = typeof(int), Required = false)]
+    [QueryStringParameter("pageSize", "Rows per page, 1 to 1000", DataType = typeof(int), Required = false)]
+    [ProducesResponseType(typeof(PagedResult<Property>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status499ClientClosedRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
@@ -25,12 +28,19 @@ public class GetActiveProperties
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "properties/active")] HttpRequest req,
         [SwaggerIgnore] CancellationToken cancellationToken)
     {
+        if (!req.TryGetPage(out var page, out var error)) {
+            return new BadRequestObjectResult(new ProblemDetails {
+                Status = StatusCodes.Status400BadRequest,
+                Title = "Invalid paging",
+                Detail = error
+            });
+        }
+
         _logger.LogInformation("Reading active properties from Dataverse.");
 
         try {
-            var properties = await _properties.GetActiveAsync(cancellationToken);
-
-            return new OkObjectResult(properties);
+            var response = await _properties.GetActiveJsonAsync(page, cancellationToken);
+            return new FileContentResult(response.Json, "application/json; charset=utf-8");
         }
         catch (DataverseUnavailableException ex) {
             _logger.LogError(ex, "Dataverse is unavailable.");
